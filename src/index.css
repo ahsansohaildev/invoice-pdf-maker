@@ -26,7 +26,8 @@ button {
   height: 297mm;
   min-height: 297mm;
   margin: 0 auto;
-  padding: 16mm 18mm;
+  padding: 0;
+  position: relative;
   background: #ffffff;
   color: #000000;
   box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
@@ -94,8 +95,8 @@ button {
 }
 
 .pdf-table th {
-  background: #7dd3fc;
-  color: #000000;
+   background: #0f4c81;
+  color: white;
   border: 1px solid #64748b;
   padding: 11px 8px;
   text-align: center;
@@ -216,4 +217,41 @@ button {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+}
+
+.one-company-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.one-tagline {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.one-contact {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.client-section {
+  margin-top: 24px;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  font-size: 12px;
+}
+
+.client-section h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.one-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 11px;
+  color: #475569;
 }

@@ -20,182 +20,187 @@ export function QuotationForm({
   onDownload,
   onLogout,
 }: Props) {
-  function updateQuotation<K extends keyof Quotation>(
-    key: K,
-    value: Quotation[K]
-  ) {
-    setQuotation((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  function update<K extends keyof Quotation>(key: K, value: Quotation[K]) {
+    setQuotation((prev) => ({ ...prev, [key]: value }));
   }
 
   return (
-    <aside className="h-screen overflow-auto border-r border-slate-200 bg-white p-6 shadow-xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-black text-slate-900">
-            Quotation Form
-          </h2>
-          <p className="text-sm text-slate-500">
-            Fill data and download A4 PDF.
-          </p>
-        </div>
+    <aside className="flex h-screen flex-col bg-white shadow-xl">
 
+      {/* ── Sticky Top Header ── */}
+      <div className="sticky top-0 z-20 shrink-0 bg-[#1a1a1a] px-6 py-4 flex items-center justify-between">
+        <div>
+          <p className="text-[10px] font-bold tracking-[3px] text-[#d4af37] uppercase">
+            A-One Aluminum & Glass
+          </p>
+          <h2 className="text-lg font-black text-white leading-tight">
+           AHSAN-DEVELOPER
+          </h2>
+        </div>
         <button
           type="button"
           onClick={onLogout}
-          className="rounded-xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200"
+          title="Logout"
+          className="rounded-lg bg-white/10 p-2.5 text-slate-400 hover:bg-white/20 hover:text-white transition"
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Quotation No."
-          value={quotation.quoteNumber}
-          onChange={(value) => updateQuotation("quoteNumber", value)}
-        />
+      {/* ── Scrollable Body ── */}
+      <div className="flex-1 overflow-auto px-5 py-5 space-y-1">
 
-        <Input
-          label="Date"
-          value={quotation.date}
-          onChange={(value) => updateQuotation("date", value)}
-        />
+        {/* ── 1. Quote Info ── */}
+        <Section title="📄  Quote Info">
+          <div className="grid grid-cols-3 gap-3">
+            <Field label="Quote No.">
+              <input
+                value={quotation.quoteNumber}
+                onChange={(e) => update("quoteNumber", e.target.value)}
+                className={inputCls}
+                placeholder="e.g. 001"
+              />
+            </Field>
+            <Field label="Date">
+              <input
+                value={quotation.date}
+                onChange={(e) => update("date", e.target.value)}
+                className={inputCls}
+                placeholder="23/03/2026"
+              />
+            </Field>
+            <Field label="Valid Until">
+              <input
+                value={quotation.validUntil}
+                onChange={(e) => update("validUntil", e.target.value)}
+                className={inputCls}
+                placeholder="30/03/2026"
+              />
+            </Field>
+          </div>
+        </Section>
 
-        <Input
-          label="Valid Until"
-          value={quotation.validUntil}
-          onChange={(value) => updateQuotation("validUntil", value)}
-        />
+        {/* ── 2. Client Info ── */}
+        <Section title="👤  Client Info">
+          <Field label="Client Name">
+            <input
+              value={quotation.clientName}
+              onChange={(e) => update("clientName", e.target.value)}
+              className={inputCls}
+              placeholder="Full name"
+            />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Phone No.">
+              <input
+                value={quotation.clientPhone}
+                onChange={(e) => update("clientPhone", e.target.value)}
+                className={inputCls}
+                placeholder="0300-0000000"
+              />
+            </Field>
+            <Field label="City / Location">
+              <input
+                value={quotation.clientLocation ?? ""}
+                onChange={(e) => update("clientLocation", e.target.value)}
+                className={inputCls}
+                placeholder="e.g. Lahore"
+              />
+            </Field>
+          </div>
+        </Section>
 
-        <Input
-          label="Client Name"
-          value={quotation.clientName}
-          onChange={(value) => updateQuotation("clientName", value)}
-        />
+        {/* ── 3. Work Items ── */}
+        <Section title="🏠  Work Items  (max 7 rows)">
+          <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-3 text-xs text-amber-800 font-semibold">
+            💡 Sq. Ft = Area &nbsp;|&nbsp; Qty = Number of units &nbsp;|&nbsp; Rate = Price per unit &nbsp;→&nbsp; Total = Qty × Rate
+          </div>
+          <QuotationItems items={items} setItems={setItems} />
+        </Section>
 
-        <Input
-          label="Client Phone"
-          value={quotation.clientPhone}
-          onChange={(value) => updateQuotation("clientPhone", value)}
-        />
+        {/* ── 4. Prepared By ── */}
+        <Section title="✍️  Sign Off">
+          <Field label="Prepared By">
+            <input
+              value={quotation.preparedBy}
+              onChange={(e) => update("preparedBy", e.target.value)}
+              className={inputCls}
+              placeholder="Your name"
+            />
+          </Field>
+          <Field label="Terms & Conditions">
+            <textarea
+              rows={4}
+              value={quotation.terms}
+              onChange={(e) => update("terms", e.target.value)}
+              className={`${inputCls} resize-none`}
+              placeholder="e.g. 50% advance required. Work starts after confirmation..."
+            />
+          </Field>
+        </Section>
 
-        <Input
-          label="Client Email"
-          value={quotation.clientEmail}
-          onChange={(value) => updateQuotation("clientEmail", value)}
-        />
+        {/* ── Download ── */}
+        <button
+          type="button"
+          onClick={onDownload}
+          className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl
+                     bg-[#d4af37] py-4 font-black text-sm text-[#1a1a1a]
+                     shadow-lg hover:bg-[#c9a227] active:scale-[0.98] transition"
+        >
+          <Download size={18} />
+          Download A4 PDF
+        </button>
+
+        <p className="pb-4 text-center text-[10px] text-slate-400">
+          Exports as A4 · Professional PDF
+        </p>
       </div>
-
-      <SectionTitle title="Company Details" />
-
-      <Input
-        label="Company Name"
-        value={quotation.companyName}
-        onChange={(value) => updateQuotation("companyName", value)}
-      />
-
-      <Input
-        label="Company Address"
-        value={quotation.companyAddress}
-        onChange={(value) => updateQuotation("companyAddress", value)}
-      />
-
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Company Phone"
-          value={quotation.companyPhone}
-          onChange={(value) => updateQuotation("companyPhone", value)}
-        />
-
-        <Input
-          label="Company Email"
-          value={quotation.companyEmail}
-          onChange={(value) => updateQuotation("companyEmail", value)}
-        />
-      </div>
-
-      <SectionTitle title="Items" />
-
-      <QuotationItems items={items} setItems={setItems} />
-
-      <SectionTitle title="Final Details" />
-
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Tax"
-          type="number"
-          value={String(quotation.tax)}
-          onChange={(value) => updateQuotation("tax", Number(value))}
-        />
-
-        <Input
-          label="Prepared By"
-          value={quotation.preparedBy}
-          onChange={(value) => updateQuotation("preparedBy", value)}
-        />
-
-        <Input
-          label="Designation"
-          value={quotation.designation}
-          onChange={(value) => updateQuotation("designation", value)}
-        />
-      </div>
-
-      <label className="mb-2 mt-4 block text-sm font-black text-slate-700">
-        Terms and Conditions
-      </label>
-
-      <textarea
-        rows={6}
-        value={quotation.terms}
-        onChange={(event) => updateQuotation("terms", event.target.value)}
-        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-sky-500"
-      />
-
-      <button
-        type="button"
-        onClick={onDownload}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-4 font-black text-white shadow-lg hover:bg-slate-800"
-      >
-        <Download size={18} />
-        Download A4 PDF
-      </button>
     </aside>
   );
 }
 
-function SectionTitle({ title }: { title: string }) {
+/* ── helpers ── */
+
+const inputCls =
+  "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm " +
+  "text-slate-800 outline-none focus:border-amber-400 focus:ring-2 " +
+  "focus:ring-amber-100 transition placeholder:text-slate-300";
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <h3 className="mb-3 mt-7 text-lg font-black text-sky-700">{title}</h3>
+    <div className="mb-5">
+      <div className="flex items-center gap-2 mb-3 mt-2">
+        <div className="h-[3px] w-5 rounded-full bg-[#d4af37]" />
+        <h3 className="text-[11px] font-black text-slate-600 uppercase tracking-widest">
+          {title}
+        </h3>
+      </div>
+      <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+        {children}
+      </div>
+    </div>
   );
 }
 
-function Input({
+function Field({
   label,
-  value,
-  onChange,
-  type = "text",
+  children,
 }: {
   label: string;
-  value: string;
-  type?: string;
-  onChange: (value: string) => void;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="mb-4">
-      <label className="mb-2 block text-sm font-black text-slate-700">
+    <div className="mb-3 last:mb-0">
+      <label className="mb-1.5 block text-[11px] font-black uppercase tracking-wider text-slate-500">
         {label}
       </label>
-
-      <input
-        type={type}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-sky-500"
-      />
+      {children}
     </div>
   );
 }
