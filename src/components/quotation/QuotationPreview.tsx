@@ -65,8 +65,8 @@ export const QuotationPreview = forwardRef<HTMLDivElement, Props>(
             <div
               style={{
                 position: "absolute",
-                top: "148px",
-                right: "68px",
+                top: "93px",
+                right: "98px",
                 fontSize: "15px",
                 fontWeight: "700",
                 color: "#111",
