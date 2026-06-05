@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { QuotationForm } from "../components/quotation/QuotationForm";
 import { QuotationPreview } from "../components/quotation/QuotationPreview";
+import type { ExtendedItem } from "../components/quotation/QuotationItems"; // ← ADD
 import { defaultItems, defaultQuotation } from "../constants/defaultQuotation";
 import { calculateTotals } from "../utils/calculateTotals";
 import { generatePdf } from "../utils/generatePdf";
@@ -11,7 +12,11 @@ type Props = {
 
 export function QuotationPage({ onLogout }: Props) {
   const [quotation, setQuotation] = useState(defaultQuotation);
-  const [items, setItems] = useState(defaultItems);
+
+  // ← Tell TypeScript this is ExtendedItem[] not QuotationItem[]
+  const [items, setItems] = useState<ExtendedItem[]>(
+    defaultItems.map((item) => ({ ...item, subSections: [] }))
+  );
 
   const previewRef = useRef<HTMLDivElement | null>(null);
 

@@ -1,13 +1,14 @@
 import { Download, LogOut } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { QuotationItems } from "./QuotationItems";
-import type { Quotation, QuotationItem } from "../../types/quotation";
+import type { ExtendedItem } from "./QuotationItems";   // ← ADD THIS
+import type { Quotation } from "../../types/quotation"; // ← remove QuotationItem import
 
 type Props = {
   quotation: Quotation;
-  items: QuotationItem[];
+  items: ExtendedItem[];                                 // ← was QuotationItem[]
   setQuotation: Dispatch<SetStateAction<Quotation>>;
-  setItems: Dispatch<SetStateAction<QuotationItem[]>>;
+  setItems: Dispatch<SetStateAction<ExtendedItem[]>>;   // ← was QuotationItem[]
   onDownload: () => void;
   onLogout: () => void;
 };
@@ -160,19 +161,12 @@ export function QuotationForm({
 }
 
 /* ── helpers ── */
-
 const inputCls =
   "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm " +
   "text-slate-800 outline-none focus:border-amber-400 focus:ring-2 " +
   "focus:ring-amber-100 transition placeholder:text-slate-300";
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-5">
       <div className="flex items-center gap-2 mb-3 mt-2">
@@ -188,13 +182,7 @@ function Section({
   );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="mb-3 last:mb-0">
       <label className="mb-1.5 block text-[11px] font-black uppercase tracking-wider text-slate-500">
