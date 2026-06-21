@@ -9,7 +9,7 @@ import {
   subSectionHasOwnValues,
 } from "../../utils/calculateTotals";
 
-const MAX_ITEMS = 7;
+const MAX_ITEMS = 14;
 
 type Props = {
   items: ExtendedItem[];

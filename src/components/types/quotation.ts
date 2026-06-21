@@ -9,13 +9,14 @@ export type Quotation = {
 
   preparedBy: string;
   terms: string;
+
+  advancePayment?: number;
 };
 
 export type SubSection = {
   id: string;
   heading: string;
   detail: string;
-
   sqFt?: number;
   rate?: number;
 };
@@ -23,14 +24,8 @@ export type SubSection = {
 export type QuotationItem = {
   id: string;
   description: string;
-
-  // This field is used as SQ.FT / Qty in the UI and PDF.
   packSize: string;
-
-  // This field is used as fallback quantity/unit.
   qty: number;
-
-  // This field is used as rate.
   unitPrice: number;
 };
 

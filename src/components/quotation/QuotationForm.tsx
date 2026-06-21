@@ -109,10 +109,9 @@ export function QuotationForm({
           </div>
         </Section>
 
-        <Section title="🏠 Work Items (max 7 rows)">
+        <Section title="🏠 Work Items">
           <div className="mb-3 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800">
-            Set SQ.FT/Rate on the item, or leave parent values empty and set
-            SQ.FT/Rate on individual sub-sections.
+           Set SQ.FT/Rate on the item, or add SQ.FT/Rate on individual sub-sections.
           </div>
 
           <QuotationItems items={items} setItems={setItems} />
@@ -138,6 +137,21 @@ export function QuotationForm({
             />
           </Field>
         </Section>
+
+        <Section title="💰 Payment Summary">
+  <Field label="Advance Payment">
+    <input
+      type="number"
+      min="0"
+      value={quotation.advancePayment ?? ""}
+      onChange={(e) =>
+        update("advancePayment", Number(e.target.value || 0))
+      }
+      className={inputCls}
+      placeholder="e.g. 5000"
+    />
+  </Field>
+</Section>
 
         <button
           type="button"

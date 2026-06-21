@@ -16,8 +16,8 @@ const GOLD = "#d4af37";
 const GOLD_DARK = "#b8960c";
 const BLACK = "#1a1a1a";
 
-const MIN_ROWS = 7;
-const TABLE_BOTTOM = 163;
+const MIN_ROWS = 14;
+const TABLE_BOTTOM = 250;
 
 type Props = {
   quotation: Quotation;
@@ -43,6 +43,8 @@ type RenderRow =
 
 export const QuotationPreview = forwardRef<HTMLDivElement, Props>(
   ({ quotation, items, totals }, ref) => {
+    const advancePayment = Math.max(0, Number(quotation.advancePayment ?? 0));
+const balanceDue = Math.max(0, totals.total - advancePayment);
     const contentRows: RenderRow[] = [];
 
     items.forEach((item, index) => {
@@ -475,7 +477,7 @@ export const QuotationPreview = forwardRef<HTMLDivElement, Props>(
                 </tbody>
 
                 <tfoot>
-                  <tr style={{ height: "44px" }}>
+                  <tr style={{ height: "60px" }}>
                     <td
                       colSpan={2}
                       style={{
@@ -539,53 +541,98 @@ export const QuotationPreview = forwardRef<HTMLDivElement, Props>(
                       </p>
                     </td>
 
-                    <td
-                      style={{
-                        borderTop: `2px solid ${GOLD_DARK}`,
-                        borderRight: `1px solid ${GOLD_DARK}`,
-                        borderLeft: `1px solid ${GOLD_DARK}`,
-                        background: "#fafaf5",
-                        padding: "4px 8px",
-                      }}
-                    />
+                   
 
-                    <td
-                      style={{
-                        borderTop: `2px solid ${GOLD_DARK}`,
-                        borderLeft: `1px solid ${GOLD_DARK}`,
-                        background: `linear-gradient(145deg, ${GOLD} 0%, #e8c84a 40%, #c9a420 100%)`,
-                        padding: "4px 8px",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      <p
-                        style={{
-                          margin: "0 0 1px 0",
-                          fontSize: "8px",
-                          fontWeight: 800,
-                          color: "#5a4000",
-                          textTransform: "uppercase",
-                          letterSpacing: "1px",
-                          fontFamily: "Georgia, serif",
-                        }}
-                      >
-                        Total Amount
-                      </p>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: "15px",
-                          fontWeight: 900,
-                          color: BLACK,
-                          letterSpacing: "0.3px",
-                          lineHeight: 1.1,
-                          fontFamily: "Georgia, serif",
-                        }}
-                      >
-                        {formatCurrency(totals.total)}/-
-                      </p>
-                    </td>
+                  <td
+  colSpan={2}
+  style={{
+    borderTop: `2px solid ${GOLD_DARK}`,
+    borderLeft: `1px solid ${GOLD_DARK}`,
+    background: `linear-gradient(145deg, ${GOLD} 0%, #e8c84a 40%, #c9a420 100%)`,
+    padding: "5px 10px",
+    textAlign: "center",
+    verticalAlign: "middle",
+  }}
+>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr auto",
+      gap: "2px 14px",
+      alignItems: "center",
+      fontFamily: "Georgia, serif",
+    }}
+  >
+    <span
+      style={{
+        fontSize: "8px",
+        fontWeight: 900,
+        color: "#5a4000",
+        textTransform: "uppercase",
+        letterSpacing: "0.8px",
+        textAlign: "left",
+      }}
+    >
+      Total Amount
+    </span>
+    <strong
+      style={{
+        fontSize: "13px",
+        color: BLACK,
+        textAlign: "right",
+        lineHeight: 1,
+      }}
+    >
+      {formatCurrency(totals.total)}/-
+    </strong>
+
+    <span
+      style={{
+        fontSize: "8px",
+        fontWeight: 900,
+        color: "#5a4000",
+        textTransform: "uppercase",
+        letterSpacing: "0.8px",
+        textAlign: "left",
+      }}
+    >
+      Advance Paid
+    </span>
+    <strong
+      style={{
+        fontSize: "12px",
+        color: BLACK,
+        textAlign: "right",
+        lineHeight: 1,
+      }}
+    >
+      {formatCurrency(advancePayment)}/-
+    </strong>
+
+    <span
+      style={{
+        fontSize: "8px",
+        fontWeight: 900,
+        color: "#5a4000",
+        textTransform: "uppercase",
+        letterSpacing: "0.8px",
+        textAlign: "left",
+      }}
+    >
+      Balance Due
+    </span>
+    <strong
+      style={{
+        fontSize: "15px",
+        color: BLACK,
+        textAlign: "right",
+        lineHeight: 1,
+      }}
+    >
+      {formatCurrency(balanceDue)}/-
+    </strong>
+  </div>
+</td>
                   </tr>
                 </tfoot>
               </table>

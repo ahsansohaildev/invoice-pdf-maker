@@ -8,6 +8,7 @@ export const defaultQuotation: Quotation = {
   clientName: "Naveed saab",
   clientPhone: "0300-0000000",
   clientEmail: "abc@gmail.com",
+    advancePayment: 0,
   clientLocation: "",
   companyName: "Purify Lube",
   companyAddress: "Plot # 31B, Block No. 03 Sector C2, Township, Lahore",
@@ -19,12 +20,13 @@ export const defaultQuotation: Quotation = {
   designation: "Sales Executive",
 };
 
-export const defaultItems: QuotationItem[] = [
+export const defaultItems = [
   {
     id: crypto.randomUUID(),
-    description: "Engine Oil 20W-50",
-    packSize: "4 Litre",
+    description: "",
+    packSize: "",
     qty: 1,
-    unitPrice: 2500,
+    unitPrice: 0,
+    subSections: [],
   },
 ];
