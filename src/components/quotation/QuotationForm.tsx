@@ -1,14 +1,13 @@
 import { Download, LogOut } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { QuotationItems } from "./QuotationItems";
-import type { ExtendedItem } from "./QuotationItems";   // ← ADD THIS
-import type { Quotation } from "../../types/quotation"; // ← remove QuotationItem import
+import type { ExtendedItem, Quotation } from "../../types/quotation";
 
 type Props = {
   quotation: Quotation;
-  items: ExtendedItem[];                                 // ← was QuotationItem[]
+  items: ExtendedItem[];
   setQuotation: Dispatch<SetStateAction<Quotation>>;
-  setItems: Dispatch<SetStateAction<ExtendedItem[]>>;   // ← was QuotationItem[]
+  setItems: Dispatch<SetStateAction<ExtendedItem[]>>;
   onDownload: () => void;
   onLogout: () => void;
 };
@@ -27,32 +26,28 @@ export function QuotationForm({
 
   return (
     <aside className="flex h-screen flex-col bg-white shadow-xl">
-
-      {/* ── Sticky Top Header ── */}
-      <div className="sticky top-0 z-20 shrink-0 bg-[#1a1a1a] px-6 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between bg-[#1a1a1a] px-6 py-4">
         <div>
-          <p className="text-[10px] font-bold tracking-[3px] text-[#d4af37] uppercase">
+          <p className="text-[10px] font-bold uppercase tracking-[3px] text-[#d4af37]">
             A-One Aluminum & Glass
           </p>
-          <h2 className="text-lg font-black text-white leading-tight">
-           AHSAN-DEVELOPER
+          <h2 className="text-lg font-black leading-tight text-white">
+            AHSAN-DEVELOPER
           </h2>
         </div>
+
         <button
           type="button"
           onClick={onLogout}
           title="Logout"
-          className="rounded-lg bg-white/10 p-2.5 text-slate-400 hover:bg-white/20 hover:text-white transition"
+          className="rounded-lg bg-white/10 p-2.5 text-slate-400 transition hover:bg-white/20 hover:text-white"
         >
           <LogOut size={16} />
         </button>
       </div>
 
-      {/* ── Scrollable Body ── */}
-      <div className="flex-1 overflow-auto px-5 py-5 space-y-1">
-
-        {/* ── 1. Quote Info ── */}
-        <Section title="📄  Quote Info">
+      <div className="flex-1 space-y-1 overflow-auto px-5 py-5">
+        <Section title="📄 Quote Info">
           <div className="grid grid-cols-3 gap-3">
             <Field label="Quote No.">
               <input
@@ -62,6 +57,7 @@ export function QuotationForm({
                 placeholder="e.g. 001"
               />
             </Field>
+
             <Field label="Date">
               <input
                 value={quotation.date}
@@ -70,6 +66,7 @@ export function QuotationForm({
                 placeholder="23/03/2026"
               />
             </Field>
+
             <Field label="Valid Until">
               <input
                 value={quotation.validUntil}
@@ -81,8 +78,7 @@ export function QuotationForm({
           </div>
         </Section>
 
-        {/* ── 2. Client Info ── */}
-        <Section title="👤  Client Info">
+        <Section title="👤 Client Info">
           <Field label="Client Name">
             <input
               value={quotation.clientName}
@@ -91,6 +87,7 @@ export function QuotationForm({
               placeholder="Full name"
             />
           </Field>
+
           <div className="grid grid-cols-2 gap-3">
             <Field label="Phone No.">
               <input
@@ -100,6 +97,7 @@ export function QuotationForm({
                 placeholder="0300-0000000"
               />
             </Field>
+
             <Field label="City / Location">
               <input
                 value={quotation.clientLocation ?? ""}
@@ -111,16 +109,16 @@ export function QuotationForm({
           </div>
         </Section>
 
-        {/* ── 3. Work Items ── */}
-        <Section title="🏠  Work Items  (max 7 rows)">
-          <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-3 text-xs text-amber-800 font-semibold">
-            💡 Sq. Ft = Area &nbsp;|&nbsp; Qty = Number of units &nbsp;|&nbsp; Rate = Price per unit &nbsp;→&nbsp; Total = Qty × Rate
+        <Section title="🏠 Work Items (max 7 rows)">
+          <div className="mb-3 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800">
+            Set SQ.FT/Rate on the item, or leave parent values empty and set
+            SQ.FT/Rate on individual sub-sections.
           </div>
+
           <QuotationItems items={items} setItems={setItems} />
         </Section>
 
-        {/* ── 4. Prepared By ── */}
-        <Section title="✍️  Sign Off">
+        <Section title="✍️ Sign Off">
           <Field label="Prepared By">
             <input
               value={quotation.preparedBy}
@@ -129,6 +127,7 @@ export function QuotationForm({
               placeholder="Your name"
             />
           </Field>
+
           <Field label="Terms & Conditions">
             <textarea
               rows={4}
@@ -140,13 +139,10 @@ export function QuotationForm({
           </Field>
         </Section>
 
-        {/* ── Download ── */}
         <button
           type="button"
           onClick={onDownload}
-          className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl
-                     bg-[#d4af37] py-4 font-black text-sm text-[#1a1a1a]
-                     shadow-lg hover:bg-[#c9a227] active:scale-[0.98] transition"
+          className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] py-4 text-sm font-black text-[#1a1a1a] shadow-lg transition hover:bg-[#c9a227] active:scale-[0.98]"
         >
           <Download size={18} />
           Download A4 PDF
@@ -160,21 +156,21 @@ export function QuotationForm({
   );
 }
 
-/* ── helpers ── */
 const inputCls =
   "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm " +
   "text-slate-800 outline-none focus:border-amber-400 focus:ring-2 " +
   "focus:ring-amber-100 transition placeholder:text-slate-300";
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="mb-5">
-      <div className="flex items-center gap-2 mb-3 mt-2">
+      <div className="mb-3 mt-2 flex items-center gap-2">
         <div className="h-[3px] w-5 rounded-full bg-[#d4af37]" />
-        <h3 className="text-[11px] font-black text-slate-600 uppercase tracking-widest">
+        <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-600">
           {title}
         </h3>
       </div>
+
       <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
         {children}
       </div>
@@ -182,7 +178,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="mb-3 last:mb-0">
       <label className="mb-1.5 block text-[11px] font-black uppercase tracking-wider text-slate-500">

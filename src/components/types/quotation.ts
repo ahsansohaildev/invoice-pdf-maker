@@ -1,23 +1,46 @@
-export interface QuotationItem {
+export type Quotation = {
+  quoteNumber: string;
+  date: string;
+  validUntil: string;
+
+  clientName: string;
+  clientPhone: string;
+  clientLocation?: string;
+
+  preparedBy: string;
+  terms: string;
+};
+
+export type SubSection = {
+  id: string;
+  heading: string;
+  detail: string;
+
+  sqFt?: number;
+  rate?: number;
+};
+
+export type QuotationItem = {
   id: string;
   description: string;
-  packSize: string;   // Sq. Ft / area field
+
+  // This field is used as SQ.FT / Qty in the UI and PDF.
+  packSize: string;
+
+  // This field is used as fallback quantity/unit.
   qty: number;
-  unitPrice: number;  // was "rate" — renamed to match components
-}
 
-export interface Quotation {
-  id: string;
-  quotationNumber: string;
-  clientName: string;       // was "customerName"
-  clientPhone: string;      // was missing entirely
-  clientLocation: string;   // was "location"
-  date: string;
-  terms?: string;
-}
+  // This field is used as rate.
+  unitPrice: number;
+};
 
-export interface Totals {
+export type ExtendedItem = QuotationItem & {
+  subSections: SubSection[];
+};
+
+export type Totals = {
   subtotal: number;
   tax: number;
-  total: number;            // was "totalAmount"
-}
+  total: number;
+  totalSqFt: number;
+};
