@@ -1,32 +1,42 @@
-﻿export interface QuotationItem {
+﻿export type Quotation = {
+  quoteNumber: string;
+  date: string;
+  validUntil: string;
+
+  clientName: string;
+  clientPhone: string;
+  clientLocation?: string;
+
+  preparedBy: string;
+  terms: string;
+
+  advancePayment?: number;
+  tax?: number;
+};
+
+export type SubSection = {
+  id: string;
+  heading: string;
+  detail: string;
+  sqFt?: number;
+  rate?: number;
+};
+
+export type QuotationItem = {
   id: string;
   description: string;
   packSize: string;
   qty: number;
   unitPrice: number;
-}
+};
 
-export interface Quotation {
-  id: string;
-  quoteNumber: string;
-  date: string;
-  validUntil: string;
-  clientName: string;
-  clientPhone: string;
-  clientEmail: string;
-  clientLocation: string;
-  companyName: string;
-  companyAddress: string;
-  companyPhone: string;
-  companyEmail: string;
-  tax: number;
-  terms: string;
-  preparedBy: string;
-  designation: string;
-}
+export type ExtendedItem = QuotationItem & {
+  subSections: SubSection[];
+};
 
-export interface Totals {
+export type Totals = {
   subtotal: number;
   tax: number;
   total: number;
-}
+  totalSqFt: number;
+};

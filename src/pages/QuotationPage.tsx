@@ -1,45 +1,53 @@
-import { useMemo, useRef, useState } from "react";
+﻿import { useMemo, useRef, useState } from "react";
 import { QuotationForm } from "../components/quotation/QuotationForm";
 import { QuotationPreview } from "../components/quotation/QuotationPreview";
-import type { ExtendedItem } from "../components/quotation/QuotationItems"; // ← ADD
 import { defaultItems, defaultQuotation } from "../constants/defaultQuotation";
+import type { ExtendedItem, Quotation } from "../types/quotation";
 import { calculateTotals } from "../utils/calculateTotals";
 import { generatePdf } from "../utils/generatePdf";
 
-type Props = {
-  onLogout: () => void;
+type QuotationPageProps = {
+  onLogout?: () => void;
 };
 
-export function QuotationPage({ onLogout }: Props) {
-  const [quotation, setQuotation] = useState(defaultQuotation);
-
-  // ← Tell TypeScript this is ExtendedItem[] not QuotationItem[]
-  const [items, setItems] = useState<ExtendedItem[]>(
-    defaultItems.map((item) => ({ ...item, subSections: [] }))
-  );
-
+export function QuotationPage({ onLogout }: QuotationPageProps) {
   const previewRef = useRef<HTMLDivElement | null>(null);
 
+  const [quotation, setQuotation] = useState<Quotation>(defaultQuotation);
+  const [items, setItems] = useState<ExtendedItem[]>(defaultItems);
+
   const totals = useMemo(() => {
-    return calculateTotals(items, quotation.tax);
+    return calculateTotals(items, quotation.tax ?? 0);
   }, [items, quotation.tax]);
 
   function handleDownload() {
-    generatePdf(
-      previewRef.current,
-      `Quotation-${quotation.quoteNumber || "New"}.pdf`
-    );
+    if (!previewRef.current) return;
+
+    const quoteNo = quotation.quoteNumber || "Draft";
+    const fileName = "AONE-Quotation-" + quoteNo + ".pdf";
+
+    generatePdf(previewRef.current, fileName);
+  }
+
+  function handleLogout() {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+
+    localStorage.removeItem("aone-auth");
+    window.location.href = "/login";
   }
 
   return (
-    <main className="grid min-h-screen grid-cols-[520px_1fr] bg-slate-100">
+    <main className="grid min-h-screen grid-cols-[420px_1fr] bg-slate-200">
       <QuotationForm
         quotation={quotation}
         items={items}
         setQuotation={setQuotation}
         setItems={setItems}
         onDownload={handleDownload}
-        onLogout={onLogout}
+        onLogout={handleLogout}
       />
 
       <QuotationPreview
@@ -51,3 +59,5 @@ export function QuotationPage({ onLogout }: Props) {
     </main>
   );
 }
+
+export default QuotationPage;

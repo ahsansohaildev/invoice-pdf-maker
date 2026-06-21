@@ -11,6 +11,9 @@ export type Quotation = {
   terms: string;
 
   advancePayment?: number;
+
+  // Keep optional for backward compatibility if old code still passes tax.
+  tax?: number;
 };
 
 export type SubSection = {

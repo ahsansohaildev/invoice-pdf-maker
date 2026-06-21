@@ -1,4 +1,4 @@
-import type { ExtendedItem, SubSection } from "../types/quotation";
+import type { ExtendedItem, SubSection, Totals } from "../types/quotation";
 
 export function parseSqFt(value: string | number | undefined | null): number {
   if (value === undefined || value === null || value === "") return 0;
@@ -37,7 +37,7 @@ export function itemAmount(item: ExtendedItem): number {
 
   if (subSectionsWithValues.length > 0) {
     return subSectionsWithValues.reduce(
-      (sum, section) => sum + subSectionAmount(section),
+      (sum: number, section: SubSection) => sum + subSectionAmount(section),
       0
     );
   }
@@ -56,7 +56,7 @@ export function itemSqFt(item: ExtendedItem): number {
 
   if (subSectionsWithValues.length > 0) {
     return subSectionsWithValues.reduce(
-      (sum, section) => sum + Number(section.sqFt ?? 0),
+      (sum: number, section: SubSection) => sum + Number(section.sqFt ?? 0),
       0
     );
   }
@@ -67,14 +67,27 @@ export function itemSqFt(item: ExtendedItem): number {
   return sqFt > 0 ? sqFt : qty;
 }
 
-export function calculateTotals(items: ExtendedItem[]) {
-  const subtotal = items.reduce((sum, item) => sum + itemAmount(item), 0);
-  const totalSqFt = items.reduce((sum, item) => sum + itemSqFt(item), 0);
+export function calculateTotals(
+  items: ExtendedItem[],
+  taxPercent = 0
+): Totals {
+  const subtotal = items.reduce(
+    (sum: number, item: ExtendedItem) => sum + itemAmount(item),
+    0
+  );
+
+  const totalSqFt = items.reduce(
+    (sum: number, item: ExtendedItem) => sum + itemSqFt(item),
+    0
+  );
+
+  const tax =
+    taxPercent > 0 ? Math.round((subtotal * taxPercent) / 100) : 0;
 
   return {
     subtotal,
-    tax: 0,
-    total: subtotal,
+    tax,
+    total: subtotal + tax,
     totalSqFt,
   };
 }
